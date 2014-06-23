@@ -9,6 +9,7 @@ double Round(double st,int count);
 Kompas::Kompas(QWidget *parent) :
     QWidget(parent)
 {
+    m_coef_A=0;
     m_last=0;
     m_last2=0;
     m_angle=0;

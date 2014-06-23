@@ -117,6 +117,7 @@ signals:
     void infoVisibilityChanged();
 
 private:
+    double m_coef_A;
     double m_last;
     double m_last2;
     int m_angle;
