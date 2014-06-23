@@ -1,0 +1,29 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Kompas.qml</file>
+        <file>content/a_LCDNovaObl.ttf</file>
+        <file>content/red/kompas1.2_red.png</file>
+        <file>content/red/kompasD_red.png</file>
+        <file>content/red/needle1.2_red.png</file>
+        <file>content/blue/kompas1.2_blue.png</file>
+        <file>content/blue/kompasD_blue.PNG</file>
+        <file>content/blue/needle1.2_blue.png</file>
+        <file>content/inverse/kompas1_inverse.png</file>
+        <file>content/inverse/kompasD_inverse.png</file>
+        <file>content/inverse/needle1_inverse.png</file>
+        <file>content/compasIcon.png</file>
+        <file>content/kompas.png</file>
+        <file>content/needle.png</file>
+        <file>content/needleSmall.png</file>
+        <file>content/needleSmall1.png</file>
+        <file>content/needleSmall11.png</file>
+        <file>content/1.png</file>
+        <file>content/2.png</file>
+        <file>content/3.png</file>
+        <file>content/kompas1.png</file>
+        <file>content/kompasD1.png</file>
+        <file>content/kompas(background).png</file>
+        <file>content/kompas1(720).png</file>
+    </qresource>
+</RCC>
