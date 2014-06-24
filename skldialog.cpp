@@ -1,11 +1,16 @@
 #include "skldialog.h"
 #include "ui_skldialog.h"
 
-sklDialog::sklDialog(QWidget *parent, int sklon) :
+sklDialog::sklDialog(QWidget *parent, int sklon, int b) :
     QDialog(parent),
     ui(new Ui::sklDialog)
 {
     ui->setupUi(this);
+    if(b)
+        this->setWindowTitle("Введите коэффициент А");
+    else
+        this->setWindowTitle("Введите склонение");
+    this->move(QPoint(980,400));
     skl=sklon;
     strSkl=QString::number(skl);
     ui->lineEdit->setText(strSkl);

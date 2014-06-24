@@ -17,7 +17,7 @@ class sklDialog : public QDialog
     int skl;
 public:
 
-    explicit sklDialog(QWidget *parent = 0,int sklon = 0);
+    explicit sklDialog(QWidget *parent = 0,int sklon = 0,int b=0);
     int getSkl();
     ~sklDialog();
 

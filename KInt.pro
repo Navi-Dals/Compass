@@ -16,13 +16,15 @@ SOURCES += main.cpp\
     kompas.cpp \
     mainwindow.cpp \
     kompassettings.cpp \
-    skldialog.cpp
+    skldialog.cpp \
+    dempfdialog.cpp
 
 HEADERS  += \
     kompas.h \
     mainwindow.h \
     kompassettings.h \
-    skldialog.h
+    skldialog.h \
+    dempfdialog.h
 
 OTHER_FILES += \
     main.qml \
@@ -35,4 +37,5 @@ FORMS += \
     kompasdialog.ui \
     mainwindow.ui \
     kompassettings.ui \
-    skldialog.ui
+    skldialog.ui \
+    dempfdialog.ui

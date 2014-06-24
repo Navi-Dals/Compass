@@ -562,6 +562,157 @@ Rectangle {
             color: "white";
         }
     }
+ //   coef_A
+    Rectangle
+    {
+        id: aButton
+        x: 1137
+        y: 241
+        width: 135
+        height: 43
+        visible: true
+        anchors.right: parent.right
+        anchors.rightMargin: 8
+        Text {
+            id:  aButtonText
+            anchors.centerIn: parent;
+            text: "123"
+            font.pixelSize: 15
+            color: "#FFFFFF"
+        }
+        gradient: Gradient { // добавление градиента
+            GradientStop {
+                id: bArgradient0
+                position: 0
+                color: rectangle1.gradientcolor0
+            }
+            GradientStop {
+                id: bArgradient1
+                position: 1
+                color: rectangle1.gradientcolor1
+            }
+        }
+        ParallelAnimation {
+            id: bAEnterAnim
+            PropertyAnimation {
+                target: bArgradient0
+                properties: "color"
+                to: rectangle1.gradientcolor1
+                duration: 300
+            }
+            PropertyAnimation {
+                target: bArgradient1
+                properties: "color"
+                to: rectangle1.gradientcolor0
+                duration: 300
+            }
+        }
+        ParallelAnimation {
+            id: bAExitAnim
+            PropertyAnimation {
+                target: bArgradient0
+                properties: "color"
+                to: rectangle1.gradientcolor0
+                duration: 300
+            }
+            PropertyAnimation {
+                target: bArgradient1
+                properties: "color"
+                to: rectangle1.gradientcolor1
+                duration: 300
+            }
+        }
+        MouseArea
+        {
+            anchors.fill: parent
+            id:  aButtonMouseArea
+            anchors.rightMargin: 0
+            anchors.bottomMargin: -1
+            anchors.leftMargin: 0
+            anchors.topMargin: 1
+            hoverEnabled: true
+            onEntered: bAEnterAnim.start()
+            onExited: bAExitAnim.start()
+            //При нажатии вызвать функцию
+            onClicked: _kompas.changeA()
+        }
+    }
+    //демпфирование
+       Rectangle
+       {
+           id: demButton
+           x: 1137
+           y: 305
+           width: 135
+           height: 43
+           visible: true
+           anchors.right: parent.right
+           anchors.rightMargin: 8
+           Text {
+               id:  demButtonText
+               anchors.centerIn: parent;
+               text: "123"
+               font.pixelSize: 15
+               color: "#FFFFFF"
+           }
+           gradient: Gradient { // добавление градиента
+               GradientStop {
+                   id: bDemrgradient0
+                   position: 0
+                   color: "#ffffff"
+               }
+               GradientStop {
+                   id: bDemrgradient1
+                   position: 1
+                   color: rectangle1.gradientcolor1
+               }
+           }
+           ParallelAnimation {
+               id: bDemEnterAnim
+               PropertyAnimation {
+                   target: bDemrgradient0
+                   properties: "color"
+                   to: rectangle1.gradientcolor1
+                   duration: 300
+               }
+               PropertyAnimation {
+                   target: bDemrgradient1
+                   properties: "color"
+                   to: rectangle1.gradientcolor0
+                   duration: 300
+               }
+           }
+           ParallelAnimation {
+               id: bDemExitAnim
+               PropertyAnimation {
+                   target: bDemrgradient0
+                   properties: "color"
+                   to: rectangle1.gradientcolor0
+                   duration: 300
+               }
+               PropertyAnimation {
+                   target: bDemrgradient1
+                   properties: "color"
+                   to: rectangle1.gradientcolor1
+                   duration: 300
+               }
+           }
+           MouseArea
+           {
+               anchors.fill: parent
+               id:  demButtonMouseArea
+               anchors.rightMargin: 0
+               anchors.bottomMargin: -1
+               anchors.leftMargin: 0
+               anchors.topMargin: 1
+               hoverEnabled: true
+               onEntered: bDemEnterAnim.start()
+               onExited: bDemExitAnim.start()
+               //При нажатии вызвать функцию
+               onClicked: _kompas.changeDempf()
+           }
+       }
+    //sklonenie
     Rectangle
     {
         id: sklButton
@@ -583,7 +734,7 @@ Rectangle {
             GradientStop {
                 id: bsklrgradient0
                 position: 0
-                color: rectangle1.gradientcolor0
+                color: "#ffffff"
             }
             GradientStop {
                 id: bsklrgradient1

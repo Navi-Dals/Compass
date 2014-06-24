@@ -9,6 +9,7 @@ double Round(double st,int count);
 Kompas::Kompas(QWidget *parent) :
     QWidget(parent)
 {
+    m_dempf=2;
     m_coef_A=0;
     m_last=0;
     m_last2=0;
@@ -242,7 +243,7 @@ void Kompas::setAngle(double a)
     ;
     m_lastAngle=m_angle;
     m_angle=m_angle+360*m_con;
-    m_angle=m_angle-(m_angle-m_last)/16;
+    m_angle=m_angle-(m_angle-m_last)/m_dempf;
     m_last=m_angle;
     if(m_fractPart-m_lastAngle1 > 50)
     {
@@ -254,7 +255,7 @@ void Kompas::setAngle(double a)
     }
     m_lastAngle1=m_fractPart;
     m_fractPart=m_fractPart+100*m_con1;
-    m_fractPart=m_fractPart-(m_fractPart-m_last2)/16;
+    m_fractPart=m_fractPart-(m_fractPart-m_last2)/m_dempf;
     m_last2=m_fractPart;
     qApp->processEvents();
     emit angleChanged();
@@ -288,8 +289,21 @@ void Kompas::changeColor()
 }
 void Kompas::changeSkl()
 {
-    sklDialog* dlg= new sklDialog(this,m_skl);
+    sklDialog* dlg= new sklDialog(this,m_skl,0);
     if(dlg->exec()) m_skl=dlg->getSkl();
+    delete (dlg);
+}
+void Kompas::changeA()
+{
+    sklDialog* dlg= new sklDialog(this,m_skl,1);
+    if(dlg->exec()) m_coef_A=dlg->getSkl();
+    delete (dlg);
+}
+
+void Kompas::changeDempf()
+{
+    DempfDialog* dlg= new DempfDialog(this,m_dempf);
+    if(dlg->exec()) m_dempf=dlg->get();
     delete (dlg);
 }
 

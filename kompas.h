@@ -12,6 +12,7 @@
 #include <QtSerialPort/QSerialPortInfo>
 #include <QTimer>
 #include "skldialog.h"
+#include "dempfdialog.h"
 
 
 
@@ -48,7 +49,9 @@ public slots:
     Q_INVOKABLE void showMenu();
     Q_INVOKABLE void changeColor();
     Q_INVOKABLE void changeSkl();
+    Q_INVOKABLE void changeA();
     Q_INVOKABLE void saveCourse();
+    Q_INVOKABLE void changeDempf();
     Q_INVOKABLE void changeInfoScreenVisibility();
 
 
@@ -117,6 +120,7 @@ signals:
     void infoVisibilityChanged();
 
 private:
+    double m_dempf;
     double m_coef_A;
     double m_last;
     double m_last2;
