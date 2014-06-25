@@ -35,6 +35,7 @@ class Kompas : public QWidget
     Q_PROPERTY(double  roll READ roll WRITE setRoll NOTIFY rollChanged)
     Q_PROPERTY(int  lastAngle READ lastAngle WRITE setLastAngle NOTIFY angleChanged)
     Q_PROPERTY(bool  infoVisibility READ infoVisibility WRITE setInfoVisibility NOTIFY infoVisibilityChanged)
+    Q_PROPERTY(bool  trueMagneticCourse READ trueMagneticCourse WRITE setTrueMagneticCourse NOTIFY trueMagneticCourseChanged)
 public:
     explicit Kompas(QWidget *parent = 0);
     ~Kompas();
@@ -53,6 +54,7 @@ public slots:
     Q_INVOKABLE void saveCourse();
     Q_INVOKABLE void changeDempf();
     Q_INVOKABLE void changeInfoScreenVisibility();
+    Q_INVOKABLE void changeTrueMagneticCourse();
 
 
     void setSupply(int st){m_supply=st;}
@@ -103,6 +105,11 @@ public slots:
     void updateSettings();
     void ShowAngle();
 
+    void setTrueMagneticCourse(bool st){m_tmCourse = st;}
+    bool trueMagneticCourse() const {return m_tmCourse;}
+
+
+
 signals:
     void angleChanged();
     void stateChanged();
@@ -118,8 +125,10 @@ signals:
     void rollChanged();
     void afterCommaChanged();
     void infoVisibilityChanged();
+    void trueMagneticCourseChanged();
 
 private:
+    bool m_tmCourse;
     double m_dempf;
     double m_coef_A;
     double m_last;

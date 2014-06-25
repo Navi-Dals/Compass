@@ -10,6 +10,7 @@ Kompas::Kompas(QWidget *parent) :
     QWidget(parent)
 {
     m_dempf=2;
+    m_tmCourse = true;
     m_coef_A=0;
     m_last=0;
     m_last2=0;
@@ -55,7 +56,7 @@ void Kompas::ShowAngle()
 {
     double arg=qrand()%40+80;
     arg=arg/10+90;
-    setAngle(arg+m_skl);
+    setAngle(arg);
 }
 
 /*
@@ -214,7 +215,8 @@ Kompas::~Kompas()
 void Kompas::setAngle(double a)
 {
 
-    a=m_skl+a;
+    if(!m_tmCourse)
+        a=m_skl+a+m_coef_A;
     if(a<0)
        a+=360;
     if(a>360)
@@ -395,6 +397,18 @@ void Kompas::changeInfoScreenVisibility()
         m_infoVisibility=false;
     }
     emit infoVisibilityChanged();
+}
+void Kompas::changeTrueMagneticCourse()
+{
+    if(!m_tmCourse)
+    {
+        m_tmCourse = true;
+    }
+    else
+    {
+        m_tmCourse = false;
+    }
+    emit trueMagneticCourseChanged();
 }
 
 /*if(port->waitForReadyRead(1000))

@@ -193,6 +193,7 @@ Rectangle {
         }
 
     }
+
     //компас
     Kompas
     {
@@ -494,6 +495,76 @@ Rectangle {
             onExited: bcolorExitAnim.start()
             //При нажатии вызвать функцию
             onClicked: _kompas.changeColor()
+        }
+    }
+    Rectangle
+    {
+        id: tmcButton
+        x: 657
+        y: 365
+        width: 135
+        height: 44
+        visible: true
+        anchors.right: parent.right
+        anchors.rightMargin: 8
+        Text {
+            id: tmcText
+            anchors.centerIn: parent
+            text: _kompas.trueMagneticCourse === false ? "Tru Course":"Magnetic Course"
+            font.pixelSize: 15
+            color: "#FFFFFF"
+        }
+        gradient: Gradient { // добавление градиента
+            GradientStop {
+                id: tmcgradient0
+                position: 0
+                color: "#ffffff"
+            }
+            GradientStop {
+                id: tmcgradient1
+                position: 1
+                color: rectangle1.gradientcolor1
+            }
+        }
+        ParallelAnimation {
+            id: tmcEnterAnim
+            PropertyAnimation {
+                target: tmcgradient0
+                properties: "color"
+                to: rectangle1.gradientcolor1
+                duration: 300
+            }
+            PropertyAnimation {
+                target: tmcgradient1
+                properties: "color"
+                to: rectangle1.gradientcolor0
+                duration: 300
+            }
+        }
+        ParallelAnimation {
+            id: tmcExitAnim
+            PropertyAnimation {
+                target: tmcgradient0
+                properties: "color"
+                to: rectangle1.gradientcolor0
+                duration: 300
+            }
+            PropertyAnimation {
+                target: tmcgradient1
+                properties: "color"
+                to: rectangle1.gradientcolor1
+                duration: 300
+            }
+        }
+        MouseArea
+        {
+            anchors.fill: parent
+            id: tmcMouseArea
+            hoverEnabled: true
+            onEntered: tmcEnterAnim.start()
+            onExited: tmcExitAnim.start()
+            //При нажатии вызвать функцию
+            onClicked: _kompas.changeTrueMagneticCourse();
         }
     }
     Rectangle
