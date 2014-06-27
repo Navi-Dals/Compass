@@ -647,7 +647,7 @@ Rectangle {
         Text {
             id:  aButtonText
             anchors.centerIn: parent;
-            text: "123"
+            text: "Коэффициент А"
             font.pixelSize: 15
             color: "#FFFFFF"
         }
@@ -722,7 +722,7 @@ Rectangle {
            Text {
                id:  demButtonText
                anchors.centerIn: parent;
-               text: "123"
+               text: "Демпфирование"
                font.pixelSize: 15
                color: "#FFFFFF"
            }

@@ -297,7 +297,7 @@ void Kompas::changeSkl()
 }
 void Kompas::changeA()
 {
-    sklDialog* dlg= new sklDialog(this,m_skl,1);
+    sklDialog* dlg= new sklDialog(this,m_coef_A,1);
     if(dlg->exec()) m_coef_A=dlg->getSkl();
     delete (dlg);
 }
