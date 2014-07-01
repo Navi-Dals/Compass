@@ -270,6 +270,20 @@ void Kompas::showMenu()
     emit menuRequest();
     kompasThread->start();
 }
+//void Kompas::setPotenA()
+//{
+
+//}
+
+//void Kompas::setPotenB()
+//{
+
+//}
+
+//void Kompas::setPotenC()
+//{
+
+//}
 
 void Kompas::updateSettings()
 {

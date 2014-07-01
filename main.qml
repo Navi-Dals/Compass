@@ -323,7 +323,7 @@ Rectangle {
         color: "#0b0a0a"
         visible: false
         border.width: 5
-        border.color: "#616461"
+        border.color: "#616561"
         Text
         {
             id: connectionText
@@ -560,6 +560,7 @@ Rectangle {
         {
             anchors.fill: parent
             id: tmcMouseArea
+            visible: true
             hoverEnabled: true
             onEntered: tmcEnterAnim.start()
             onExited: tmcExitAnim.start()
@@ -600,6 +601,112 @@ Rectangle {
             color: "white";
         }
     }
+
+//коэффициент А потенциометра
+    Rectangle
+    {
+        id: potenA
+        x: 8
+        y: 340
+        //visible: _kompas.infoVisibility
+        width: 114
+        height: 44
+        border.width: 2
+        border.color: "#0500ff"
+        color: "black"
+        Text
+        {
+            id: potenAText
+            x: 0
+            y: -30
+            text: "коэффициент А"
+            font.pixelSize: 22
+            font.family: a_LCDNovaObl.name
+            color: "white";
+        }
+        Text
+        {
+            id: potenAArg
+            anchors.centerIn: parent
+            text: _kompas.potenA()
+            font.pixelSize: 22
+            font.family: a_LCDNovaObl.name
+            style: Text.Outline
+            styleColor: "white"
+            color: "white";
+        }
+    }
+
+//коэффициент B потенциометра
+    Rectangle
+    {
+        id: potenB
+        x: 8
+        y: 423
+        //visible: _kompas.infoVisibility
+        width: 114
+        height: 44
+        border.width: 2
+        border.color: "#0500ff"
+        color: "black"
+        Text
+        {
+            id: potenBText
+            x: 0
+            y: -30
+            text: "коэффициент B"
+            font.pixelSize: 22
+            font.family: a_LCDNovaObl.name
+            color: "white";
+        }
+        Text
+        {
+            id: potenBArg
+            anchors.centerIn: parent
+            text: _kompas.poetB()
+            font.pixelSize: 22
+            font.family: a_LCDNovaObl.name
+            style: Text.Outline
+            styleColor: "white"
+            color: "white";
+        }
+    }
+
+//коэффициент C потенциометра
+    Rectangle
+    {
+        id: potenC
+        x: 8
+        y: 518
+        //visible: _kompas.infoVisibility
+        width: 114
+        height: 44
+        border.width: 2
+        border.color: "#0500ff"
+        color: "black"
+        Text
+        {
+            id: potenCText
+            x: 0
+            y: -30
+            text: "коэффициент C"
+            font.pixelSize: 22
+            font.family: a_LCDNovaObl.name
+            color: "white";
+        }
+        Text
+        {
+            id: potenCArg
+            anchors.centerIn: parent
+            text: _kompas.poetC()
+            font.pixelSize: 22
+            font.family: a_LCDNovaObl.name
+            style: Text.Outline
+            styleColor: "white"
+            color: "white";
+        }
+    }
+
     Rectangle
     {
         id: roll
