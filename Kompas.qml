@@ -10,7 +10,6 @@ Item {
     y: 10
     width: 720
     height: 720
-
         Image
         {
                 x: 40

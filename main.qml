@@ -448,7 +448,7 @@ Rectangle {
             GradientStop {
                 id: bcolorgradient0
                 position: 0
-                color: "#ffffff"
+                color: rectangle1.gradientcolor0
             }
             GradientStop {
                 id: bcolorgradient1
@@ -518,7 +518,7 @@ Rectangle {
             GradientStop {
                 id: tmcgradient0
                 position: 0
-                color: "#ffffff"
+                color: rectangle1.gradientcolor0
             }
             GradientStop {
                 id: tmcgradient1
@@ -606,8 +606,8 @@ Rectangle {
     Rectangle
     {
         id: potenA
-        x: 8
-        y: 340
+        x: 18
+        y: 343
         //visible: _kompas.infoVisibility
         width: 114
         height: 44
@@ -641,8 +641,8 @@ Rectangle {
     Rectangle
     {
         id: potenB
-        x: 8
-        y: 423
+        x: 18
+        y: 426
         //visible: _kompas.infoVisibility
         width: 114
         height: 44
@@ -676,8 +676,8 @@ Rectangle {
     Rectangle
     {
         id: potenC
-        x: 8
-        y: 518
+        x: 18
+        y: 521
         //visible: _kompas.infoVisibility
         width: 114
         height: 44
@@ -837,7 +837,7 @@ Rectangle {
                GradientStop {
                    id: bDemrgradient0
                    position: 0
-                   color: "#ffffff"
+                   color: rectangle1.gradientcolor0
                }
                GradientStop {
                    id: bDemrgradient1
@@ -912,7 +912,7 @@ Rectangle {
             GradientStop {
                 id: bsklrgradient0
                 position: 0
-                color: "#ffffff"
+                color: rectangle1.gradientcolor0
             }
             GradientStop {
                 id: bsklrgradient1
