@@ -14,7 +14,7 @@ Item {
         {
                 x: 40
                 y: 43
-                width: 616
+                width: 632
                 height: 632
                 clip: true
                 sourceSize.height: 430
@@ -28,7 +28,7 @@ Item {
                 transform: Rotation
                 {
                     id: needleSmallRotation
-                    origin.x: 308
+                    origin.x: 316
                     origin.y: 316
                     axis { x: 0; y: 0; z: 1 }
                     angle: -display.fractPart*3.6
@@ -82,9 +82,12 @@ Item {
             y: -18
             width: 747
             height: 738
-            sourceSize.width: 496
+            //clip: true
+            //sourceSize.width: 496
             z: -1
-            source: "content/kompas(background).png"
+            source: "content/backgrond1.svg"
+            sourceSize.width: parent.width
+            sourceSize.height: parent.height
         }
 
         Image {

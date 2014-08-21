@@ -8,7 +8,21 @@ Rectangle {
     width:  1280
     height: 800
     //color: "#D3D3D3"
-    color : "#000000"
+
+    Item {
+             width: parent.width
+             height: parent.height
+             anchors { top: parent.top; bottom: parent.bot }
+
+             Image {
+                 id: background
+                 anchors.fill: parent
+                 source: "content/steel.jpg"
+                 fillMode: Image.PreserveAspectCrop
+             }
+         }
+
+    /*color : "#000000"
     gradient: Gradient { // добавление градиента
         GradientStop {
             id: gradient0
@@ -40,7 +54,7 @@ Rectangle {
             position: 1
             color: "#1C1C1C"
         }
-    }
+    }*/
 
     property string gradientcolor0: "#FF7C7C7C"
     property string gradientcolor1: "#FF4E4E4E"
@@ -223,8 +237,8 @@ Rectangle {
             width: 177
             height: 75
             color: "#000000"
-            anchors.verticalCenterOffset: -5
-            anchors.horizontalCenterOffset: -10
+            anchors.verticalCenterOffset: 1
+            anchors.horizontalCenterOffset: 1
             FontLoader { id: a_LCDNovaObl; source: "content/a_LCDNovaObl.ttf" }
             Text
             {

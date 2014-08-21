@@ -11,8 +11,8 @@
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 #include <QTimer>
-#include "/mnt/rasp-pi-rootfs/usr/include/linux/i2c.h"
-#include "/mnt/rasp-pi-rootfs/usr/include/linux/i2c-dev.h"
+//#include "/mnt/rasp-pi-rootfs/usr/include/linux/i2c.h"
+//#include "/mnt/rasp-pi-rootfs/usr/include/linux/i2c-dev.h"
 #include "skldialog.h"
 #include "dempfdialog.h"
 

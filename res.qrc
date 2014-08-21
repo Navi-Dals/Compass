@@ -25,5 +25,8 @@
         <file>content/kompasD1.png</file>
         <file>content/kompas(background).png</file>
         <file>content/kompas1(720).png</file>
+        <file>content/background.svg</file>
+        <file>content/backgrond1.svg</file>
+        <file>content/steel.jpg</file>
     </qresource>
 </RCC>
