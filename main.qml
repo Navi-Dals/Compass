@@ -5,14 +5,13 @@ Rectangle {
     id: rectangle1
     //width:  window.dwidth
     //height: window.dheight
-    width:  1280
-    height: 800
+    width:  1366
+    height: 768
     //color: "#D3D3D3"
 
     Item {
-             width: parent.width
-             height: parent.height
-             anchors { top: parent.top; bottom: parent.bot }
+        anchors.fill: parent
+             anchors { bottom: parent.bot }
 
              Image {
                  id: background
@@ -212,14 +211,15 @@ Rectangle {
     Kompas
     {
         id:kompas
-        x: 7
-        y: 0
         width: 720
         height: 718
-        anchors.verticalCenterOffset: 22
-        anchors.horizontalCenterOffset: -43
+        anchors.topMargin: 30
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.top: parent.top
+        //x: 7
+        //y: 0
         objectName: "kompas"
-        anchors.centerIn: parent
         value:_kompas.angle
         fractPart:_kompas.fractPart
         savedCourse: _kompas.savedCourse
@@ -366,13 +366,11 @@ Rectangle {
     {
         id: menuButton
         x: 34
-        y:187
+        y:179
         width: 135
         height: 37
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 576
-        anchors.left: parent.left
-        anchors.leftMargin: 1137
+        anchors.right: parent.right
+        anchors.rightMargin: 8
         visible: true
         Text {
             id: menuText
@@ -585,7 +583,6 @@ Rectangle {
     Rectangle
     {
         id: pitch
-        x: 18
         y: 63
         visible: _kompas.infoVisibility
         width: 114
@@ -593,6 +590,8 @@ Rectangle {
         border.width: 2
         border.color: "#0500ff"
         color: "black"
+        anchors.left: parent.left
+        anchors.leftMargin: 18
         Text
         {
             id: pitchText
@@ -620,14 +619,15 @@ Rectangle {
     Rectangle
     {
         id: potenA
-        x: 18
         y: 343
-        //visible: _kompas.infoVisibility
         width: 114
+        //visible: _kompas.infoVisibility
         height: 44
         border.width: 2
         border.color: "#0500ff"
         color: "black"
+        anchors.left: parent.left
+        anchors.leftMargin: 18
         Text
         {
             id: potenAText
@@ -655,7 +655,6 @@ Rectangle {
     Rectangle
     {
         id: potenB
-        x: 18
         y: 426
         //visible: _kompas.infoVisibility
         width: 114
@@ -663,6 +662,8 @@ Rectangle {
         border.width: 2
         border.color: "#0500ff"
         color: "black"
+        anchors.left: parent.left
+        anchors.leftMargin: 18
         Text
         {
             id: potenBText
@@ -690,7 +691,6 @@ Rectangle {
     Rectangle
     {
         id: potenC
-        x: 18
         y: 521
         //visible: _kompas.infoVisibility
         width: 114
@@ -698,6 +698,8 @@ Rectangle {
         border.width: 2
         border.color: "#0500ff"
         color: "black"
+        anchors.left: parent.left
+        anchors.leftMargin: 18
         Text
         {
             id: potenCText
@@ -724,14 +726,15 @@ Rectangle {
     Rectangle
     {
         id: roll
-        x: 18
         y: 148
         visible: _kompas.infoVisibility
         width: 114
         height: 44
         border.width: 2
-        border.color: "blue"
+        border.color: "#0500ff"
         color: "black"
+        anchors.left: parent.left
+        anchors.leftMargin: 18
         Text
         {
             id: rollText
