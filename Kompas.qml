@@ -16,21 +16,22 @@ Item {
                 y: 43
                 width: 720
                 height: 720
+                z: 0
                 rotation: 0
                 clip: true
                 sourceSize.height: 430
                 sourceSize.width: 430
-                anchors.verticalCenterOffset: 0
-                anchors.horizontalCenterOffset: 0
-                source: "content/kompasD1.png"
+                anchors.verticalCenterOffset: -5
+                anchors.horizontalCenterOffset: -6
+                source: "content/kompasD1(720).png"
                 smooth: true
                 anchors.horizontalCenter: image1.horizontalCenter
                 anchors.verticalCenter: image1.verticalCenter
                 transform: Rotation
                 {
                     id: needleSmallRotation
-                    origin.x: 360
-                    origin.y: 360
+                    origin.x: 365
+                    origin.y: 366
                     axis { x: 0; y: 0; z: 1 }
                     angle: -display.fractPart*3.6
                     Behavior on angle
@@ -67,7 +68,7 @@ Item {
             x: 360
             width: 4
             height: 141
-            anchors.horizontalCenterOffset: 2
+            anchors.horizontalCenterOffset: 0
             anchors.top: parent.top
             anchors.topMargin: 22
             anchors.horizontalCenter: image1.horizontalCenter
@@ -89,7 +90,7 @@ Item {
             //clip: true
             //sourceSize.width: 496
             z: -1
-            source: "content/backgrond1.svg"
+            source: "content/background1.svg"
             sourceSize.width: parent.width
             sourceSize.height: parent.height
         }

@@ -231,14 +231,15 @@ Rectangle {
         {
             id: lcdDisplay
             x: 155
-            anchors.centerIn: parent
             border.width: 3
             border.color: "black"
             width: 177
             height: 75
             color: "#000000"
-            anchors.verticalCenterOffset: 1
+            anchors.verticalCenterOffset: 0
             anchors.horizontalCenterOffset: 1
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
             FontLoader { id: a_LCDNovaObl; source: "content/a_LCDNovaObl.ttf" }
             Text
             {

@@ -28,5 +28,7 @@
         <file>content/background.svg</file>
         <file>content/backgrond1.svg</file>
         <file>content/steel.jpg</file>
+        <file>content/background1.svg</file>
+        <file>content/kompasD1(720).png</file>
     </qresource>
 </RCC>
