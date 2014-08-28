@@ -108,7 +108,7 @@ Item {
                 origin.x: 360
                 origin.y: 360
                 axis { x: 0; y: 0; z: 1 }
-                angle: -display.lastAngle
+                angle: -display.value
                 Behavior on angle
                 {
                     SpringAnimation
