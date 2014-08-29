@@ -39,7 +39,37 @@ Kompas::Kompas(QWidget *parent) :
     settings = new kompasSettings(parent);
     port = new QSerialPort;
     timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(ShowAngle()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(on()));
+
+    qDebug()<<settings->m_name_COM;
+    port->setPortName(settings->m_name_COM);
+    if (port->open(QIODevice::ReadWrite))
+    {
+        updateSettings();
+        QSerialPortInfo *info = new QSerialPortInfo(*port);
+        qDebug() << "Name        : " << info->portName();
+        qDebug() << "Description : " << info->description();
+        qDebug() << "Manufacturer: " << info->manufacturer();
+        qDebug() << "BaudRate: " << port->baudRate();
+        qDebug() << "Parity: " << port->parity();
+        qDebug() << "Data bits: " << port->dataBits();
+        qDebug() << "Stop Bits: " << port->stopBits();
+        delete info;
+        m_state=1;
+        emit stateChanged();
+        m_connect_state=1;
+        emit connect_stateChanged();
+        qDebug()<<"state = 1 ON";
+        qDebug()<<settings->m_name_COM<<"opened";
+    }
+    else
+    {
+        if(port->isOpen())
+            port->close();
+        qDebug()<<"Error while opening";
+    }
+
+    timer->start(500);
 }
 
 /*void Kompas::on()
@@ -84,91 +114,57 @@ magnetometer */
 
 void Kompas::on()
 {
-    qDebug()<<settings->m_name_COM;
-    port->setPortName(settings->m_name_COM);
-    if (port->open(QIODevice::ReadWrite))
+    if(port->isOpen() && port->waitForReadyRead(1000))
     {
-        updateSettings();
-        QSerialPortInfo *info = new QSerialPortInfo(*port);
-        qDebug() << "Name        : " << info->portName();
-        qDebug() << "Description : " << info->description();
-        qDebug() << "Manufacturer: " << info->manufacturer();
-        qDebug() << "BaudRate: " << port->baudRate();
-        qDebug() << "Parity: " << port->parity();
-        qDebug() << "Data bits: " << port->dataBits();
-        qDebug() << "Stop Bits: " << port->stopBits();
-        delete info;
-        m_state=1;
-        emit stateChanged();
-        m_connect_state=1;
-        emit connect_stateChanged();
-        qDebug()<<"state = 1 ON";
-        qDebug()<<settings->m_name_COM<<"opened";
-
-        if(port->waitForReadyRead(1000))
+        QString data;
+        QByteArray ByteArray;
+        m_state = 1;
+        while(m_state)
         {
-            QString data;
-            QByteArray ByteArray;
-            while(m_state)
+            qint64 byteAvail = port->bytesAvailable();
+            qApp->processEvents();
+            if(byteAvail >=23)
             {
-                qint64 byteAvail = port->bytesAvailable();
-                qApp->processEvents();
-                if(byteAvail >=23)
+                ByteArray = port->readAll();
+                data = data.fromLocal8Bit(ByteArray).trimmed();
+                if(ByteArray[3]=='p')
                 {
-                    ByteArray = port->readAll();
-                    data = data.fromLocal8Bit(ByteArray).trimmed();
-                    if(ByteArray[3]=='p')
+                    QBitArray bitdata(144),two_bytes(16);
+                    for(int i = 0,j; i < 144; ++i)
                     {
-                        QBitArray bitdata(144),two_bytes(16);
-                        for(int i = 0,j; i < 144; ++i)
-                        {
-                            j=i/8;
-                            if(j<=18)
-                                bitdata[i] = ByteArray[j] & (1 << i%8);
-                            else
-                                break;
-                        }
-                        /*qDebug()<<"First Start byte:"<<ByteArray[0];
-                        for(int i=0,j=7;i<8,j>=0;i++,j--){byte[j]=bitdata[i];} qDebug()<<byte;
-                        qDebug()<<"Second Start byte:"<<ByteArray[1];
-                        for(int i=8,j=7;i<16,j>=0;i++,j--){byte[j]=bitdata[i];} qDebug()<<byte;
-                        qDebug()<<"Third Start byte:"<<ByteArray[2];
-                        for(int i=16,j=7;i<24,j>=0;i++,j--){byte[j]=bitdata[i];} qDebug()<<byte;
-                        qDebug()<<"Message ID:"<<ByteArray[3];
-                        for(int i=24,j=7;i<32,j>=0;i++,j--){byte[j]=bitdata[i];} qDebug()<<byte;
-                        qDebug()<<"Count of bytes:"<<ByteArray[4];
-                        for(int i=32,j=7;i<40,j>=0;i++,j--){byte[j]=bitdata[i];} qDebug()<<byte;*/
-                        for(int i=40,j=15;i<56&&j>=0;i++,j--){two_bytes[j]=bitdata[i];} //Roll
-                        setRoll(Round(toDec(two_bytes,1)*1.41,1));
-                        for(int i=56,j=15;i<72&&j>=0;i++,j--){two_bytes[j]=bitdata[i];} //Pitch
-                        setPitch(Round(toDec(two_bytes,1)*1.41,1));
-                        for(int i=72,j=15;i<88&&j>=0;i++,j--){two_bytes[j]=bitdata[i];} //Azimuth
-                        //qDebug()<<"Dec form: "<<toDec(two_bytes);
-                        //qDebug()<<"DATA " << bitdata;
-                        setAngle(Round(toDec(two_bytes,0)*1.41,1));
-                        //qApp->processEvents();
+                        j=i/8;
+                        if(j<=18)
+                            bitdata[i] = ByteArray[j] & (1 << i%8);
+                        else
+                            break;
                     }
-                    if(m_state == 0)
-                    {
-                        qApp->processEvents();
-                        break;
-                    }
+                    /*qDebug()<<"First Start byte:"<<ByteArray[0];
+                    for(int i=0,j=7;i<8,j>=0;i++,j--){byte[j]=bitdata[i];} qDebug()<<byte;
+                    qDebug()<<"Second Start byte:"<<ByteArray[1];
+                    for(int i=8,j=7;i<16,j>=0;i++,j--){byte[j]=bitdata[i];} qDebug()<<byte;
+                    qDebug()<<"Third Start byte:"<<ByteArray[2];
+                    for(int i=16,j=7;i<24,j>=0;i++,j--){byte[j]=bitdata[i];} qDebug()<<byte;
+                    qDebug()<<"Message ID:"<<ByteArray[3];
+                    for(int i=24,j=7;i<32,j>=0;i++,j--){byte[j]=bitdata[i];} qDebug()<<byte;
+                    qDebug()<<"Count of bytes:"<<ByteArray[4];
+                    for(int i=32,j=7;i<40,j>=0;i++,j--){byte[j]=bitdata[i];} qDebug()<<byte;*/
+                    for(int i=40,j=15;i<56&&j>=0;i++,j--){two_bytes[j]=bitdata[i];} //Roll
+                    setRoll(Round(toDec(two_bytes,1)*1.41,1));
+                    for(int i=56,j=15;i<72&&j>=0;i++,j--){two_bytes[j]=bitdata[i];} //Pitch
+                    setPitch(Round(toDec(two_bytes,1)*1.41,1));
+                    for(int i=72,j=15;i<88&&j>=0;i++,j--){two_bytes[j]=bitdata[i];} //Azimuth
+                    //qDebug()<<"Dec form: "<<toDec(two_bytes);
+                    //qDebug()<<"DATA " << bitdata;
+                    setAngle(Round(toDec(two_bytes,0)*1.41,1));
+                    m_state=0;
+                    qApp->processEvents();
                 }
             }
-            if(port->isOpen())
-                port->close();
-            qDebug()<<"port state"<<port->isOpen();
-        }
-        else
-        {
-            qDebug()<<"WaitForReadyRead failed";
         }
     }
     else
     {
-        if(port->isOpen())
-            port->close();
-        qDebug()<<"Error while opening";
+        qDebug()<<"WaitForReadyRead failed";
     }
 }
 
@@ -184,7 +180,7 @@ void Kompas::quitThread()
 }
 void Kompas::off()
 {
-    //timer->stop();
+    timer->stop();
     m_state=0;
     emit stateChanged();
     m_connect_state=0;

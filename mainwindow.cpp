@@ -9,15 +9,15 @@ MainWindow::MainWindow(QWidget *parent) :
     QDeclarativeView *qmlView = new QDeclarativeView(this);
     kompas = new Kompas(this);
 
-    connect(kompas->kompasThread,SIGNAL(started()),kompas,SLOT(on()));
-    connect(kompas->kompasThread,SIGNAL(finished()),kompas,SLOT(off()));
+    //connect(kompas->kompasThread,SIGNAL(started()),kompas,SLOT(on()));
+    //connect(kompas->kompasThread,SIGNAL(finished()),kompas,SLOT(off()));
     connect(kompas,SIGNAL(menuRequest()),kompas,SLOT(updateSettings()));
 
     qmlView->rootContext()->setContextProperty("_kompas", kompas);
     qmlView->rootContext()->setContextProperty("window", this);
     qmlView->setSource(QUrl("qrc:/main.qml"));
     setCentralWidget(qmlView);
-    kompas->kompasThread->start();
+    //kompas->kompasThread->start();
 }
 
 MainWindow::~MainWindow()
@@ -27,7 +27,7 @@ MainWindow::~MainWindow()
 }
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    kompas->kompasThread->quit();
+    //kompas->kompasThread->quit();
     event->accept();
     QMainWindow::closeEvent(event);
 }

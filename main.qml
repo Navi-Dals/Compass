@@ -213,7 +213,7 @@ Rectangle {
         id:kompas
         width: 720
         height: 718
-        anchors.topMargin: 30
+        anchors.topMargin: 27
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         anchors.top: parent.top

@@ -158,10 +158,11 @@ private:
     bool m_infoVisibility;
     double m_summ_ang;
 
-    QTimer *timer;
+
 
     double toDec(QBitArray,int);
 public:
+    QTimer *timer;
     QThread *kompasThread;
     kompasSettings *settings;
     QSerialPort *port;
