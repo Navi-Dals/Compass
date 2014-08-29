@@ -47,6 +47,7 @@ public slots:
 
     Q_INVOKABLE void on();
     Q_INVOKABLE void off();
+    Q_INVOKABLE void initComp();
     Q_INVOKABLE void startThread();
     Q_INVOKABLE void quitThread();
     Q_INVOKABLE void showMenu();
@@ -130,6 +131,7 @@ signals:
     void trueMagneticCourseChanged();
 
 private:
+    bool m_comp_state;
     bool m_tmCourse;
     double m_dempf;
     double m_coef_A;

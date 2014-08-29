@@ -9,6 +9,7 @@ double Round(double st,int count);
 Kompas::Kompas(QWidget *parent) :
     QWidget(parent)
 {
+    m_comp_state=1;
     m_dempf=2;
     m_tmCourse = true;
     m_coef_A=0;
@@ -41,35 +42,7 @@ Kompas::Kompas(QWidget *parent) :
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(on()));
 
-    qDebug()<<settings->m_name_COM;
-    port->setPortName(settings->m_name_COM);
-    if (port->open(QIODevice::ReadWrite))
-    {
-        updateSettings();
-        QSerialPortInfo *info = new QSerialPortInfo(*port);
-        qDebug() << "Name        : " << info->portName();
-        qDebug() << "Description : " << info->description();
-        qDebug() << "Manufacturer: " << info->manufacturer();
-        qDebug() << "BaudRate: " << port->baudRate();
-        qDebug() << "Parity: " << port->parity();
-        qDebug() << "Data bits: " << port->dataBits();
-        qDebug() << "Stop Bits: " << port->stopBits();
-        delete info;
-        m_state=1;
-        emit stateChanged();
-        m_connect_state=1;
-        emit connect_stateChanged();
-        qDebug()<<"state = 1 ON";
-        qDebug()<<settings->m_name_COM<<"opened";
-    }
-    else
-    {
-        if(port->isOpen())
-            port->close();
-        qDebug()<<"Error while opening";
-    }
-
-    timer->start(500);
+    timer->start(100);
 }
 
 /*void Kompas::on()
@@ -114,6 +87,40 @@ magnetometer */
 
 void Kompas::on()
 {
+    QSerialPortInfo *info = new QSerialPortInfo(*port);
+    if(!(port->isOpen() && info->portName() == settings->m_name_COM))
+    {
+        if(port->isOpen())
+            port->close();
+
+        qDebug()<<settings->m_name_COM;
+        port->setPortName(settings->m_name_COM);
+        if (port->open(QIODevice::ReadWrite))
+        {
+            updateSettings();
+            QSerialPortInfo *info = new QSerialPortInfo(*port);
+            qDebug() << "Name        : " << info->portName();
+            qDebug() << "Description : " << info->description();
+            qDebug() << "Manufacturer: " << info->manufacturer();
+            qDebug() << "BaudRate: " << port->baudRate();
+            qDebug() << "Parity: " << port->parity();
+            qDebug() << "Data bits: " << port->dataBits();
+            qDebug() << "Stop Bits: " << port->stopBits();
+            delete info;
+            m_state=1;
+            emit stateChanged();
+            m_connect_state=1;
+            emit connect_stateChanged();
+            qDebug()<<"state = 1 ON";
+            qDebug()<<settings->m_name_COM<<"opened";
+        }
+        else
+        {
+            if(port->isOpen())
+                port->close();
+            qDebug()<<"Error while opening";
+        }
+    }
     if(port->isOpen() && port->waitForReadyRead(1000))
     {
         QString data;
@@ -230,7 +237,7 @@ void Kompas::setAngle(double a)
     }
     m_lastAngle=m_angle;
     m_angle=m_angle+360*m_con;
-    m_angle=m_angle-(m_angle-m_last)/m_dempf;
+    m_angle=m_angle-(m_angle-m_last)/(m_dempf*2);
     m_last=m_angle;
 
     if(m_fractPart-m_lastAngle1 > 50)
@@ -243,18 +250,116 @@ void Kompas::setAngle(double a)
     }
     m_lastAngle1=m_fractPart;
     m_fractPart=m_fractPart+100*m_con1;
-    m_fractPart=m_fractPart-(m_fractPart-m_last2)/m_dempf;
+    m_fractPart=m_fractPart-(m_fractPart-m_last2)/(m_dempf*2);
     m_last2=m_fractPart;
     qApp->processEvents();
     emit angleChanged();
 }
 
+void Kompas::initComp()
+{
+
+    QString data;
+    double progress = 0;
+
+    QByteArray dataForWrite,dataRead;
+    dataForWrite.insert(0,0x0d);
+    dataForWrite.insert(1,0x0a);
+    dataForWrite.insert(2,0x7e);
+    dataForWrite.insert(3,0x72);
+    dataForWrite.insert(4,0x01);
+    dataForWrite.insert(5,0x04);
+    dataForWrite.insert(6,0x09);
+    if(port->isOpen())
+    {
+        timer->stop();
+        port->write(dataForWrite,7);
+        //port->waitForBytesWritten(1000);
+        dataForWrite.insert(5,0x01);
+
+        while (m_comp_state)
+        {
+
+            port->write(dataForWrite,7);
+
+            if(port->waitForBytesWritten(1000))
+            {
+
+                if(port->waitForReadyRead(1000))
+                {
+                    if(port->bytesAvailable()>=13)
+                        dataRead = port->readAll();
+                    data = data.fromLocal8Bit(dataRead).trimmed();
+
+                    if(dataRead[3] == 'r')
+                    {
+                        QBitArray bitdata(104),one_byte(8);
+                        for(int i = 0,j; i < 104; ++i)
+                        {
+                            j=i/8;
+                            if(j<=13)
+                                bitdata[i] = dataRead[j] & (1 << i%8);
+                            else
+                                break;
+                        }
+                        qDebug()<<data;
+                        /*qDebug()<<"First Start byte:"<<ByteArray[0];
+                        for(int i=0,j=7;i<8,j>=0;i++,j--){byte[j]=bitdata[i];} qDebug()<<byte;
+                        qDebug()<<"Second Start byte:"<<ByteArray[1];
+                        for(int i=8,j=7;i<16,j>=0;i++,j--){byte[j]=bitdata[i];} qDebug()<<byte;
+                        qDebug()<<"Third Start byte:"<<ByteArray[2];
+                        for(int i=16,j=7;i<24,j>=0;i++,j--){byte[j]=bitdata[i];} qDebug()<<byte;
+                        qDebug()<<"Message ID:"<<ByteArray[3];
+                        for(int i=24,j=7;i<32,j>=0;i++,j--){byte[j]=bitdata[i];} qDebug()<<byte;
+                        qDebug()<<"Count of bytes:"<<ByteArray[4];
+                        for(int i=32,j=7;i<40,j>=0;i++,j--){byte[j]=bitdata[i];} qDebug()<<byte;*/
+                        //for(int i=40,j=15;i<56&&j>=0;i++,j--){two_bytes[j]=bitdata[i];} //Roll
+                        //setRoll(Round(toDec(two_bytes,1)*1.41,1));
+                        //for(int i=56,j=15;i<72&&j>=0;i++,j--){two_bytes[j]=bitdata[i];} //Pitch
+                        //setPitch(Round(toDec(two_bytes,1)*1.41,1));
+                       // for(int i=72,j=15;i<88&&j>=0;i++,j--){two_bytes[j]=bitdata[i];} //Azimuth
+                        //qDebug()<<"Dec form: "<<toDec(two_bytes);
+                        //qDebug()<<"DATA " << bitdata;
+                        //setAngle(Round(toDec(two_bytes,0)*1.41,1));
+                        //m_state=0;
+                        //qApp->processEvents();
+                        for(int i=0,j=7;i<7,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<(progress = toDec(one_byte,0));qDebug()<<one_byte;
+                        for(int i=80,j=7;i<88,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<(progress = toDec(one_byte,0));qDebug()<<one_byte;
+
+                        for(int i=8,j=7;i<16,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<(progress = toDec(one_byte,0));qDebug()<<one_byte;
+                        if(one_byte[6])
+                        {
+                            qDebug()<<"finish";
+                            break;
+                        }
+                        dataForWrite.insert(5,0xf3);
+                        qApp->processEvents();
+                    }
+                }
+
+            }
+            else
+            {
+                qDebug()<<"Error while writing data";
+            }
+
+        }
+    }
+    else if(port->isOpen())
+                port->close();
+    port->close();
+    timer->start(500);
+}
+
+
 void Kompas::showMenu()
 {
-    kompasThread->quit();
+    //kompasThread->quit();
+    timer->stop();
     settings->exec();
     emit menuRequest();
-    kompasThread->start();
+    //kompasThread->start();
+    timer->start(500);
 }
 //void Kompas::setPotenA()
 //{

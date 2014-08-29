@@ -5,8 +5,8 @@ Rectangle {
     id: rectangle1
     //width:  window.dwidth
     //height: window.dheight
-    width:  1366
-    height: 768
+    width:  1920
+    height: 1080
     //color: "#D3D3D3"
 
     Item {
@@ -212,11 +212,9 @@ Rectangle {
     {
         id:kompas
         width: 720
-        height: 718
-        anchors.topMargin: 27
+        height: 708
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        anchors.top: parent.top
         //x: 7
         //y: 0
         objectName: "kompas"
@@ -231,13 +229,11 @@ Rectangle {
         {
             id: lcdDisplay
             x: 155
+            width: 177
+            height: 85
             border.width: 3
             border.color: "black"
-            width: 177
-            height: 75
             color: "#000000"
-            anchors.verticalCenterOffset: 0
-            anchors.horizontalCenterOffset: 1
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             FontLoader { id: a_LCDNovaObl; source: "content/a_LCDNovaObl.ttf" }
@@ -578,7 +574,7 @@ Rectangle {
             onEntered: tmcEnterAnim.start()
             onExited: tmcExitAnim.start()
             //При нажатии вызвать функцию
-            onClicked: _kompas.changeTrueMagneticCourse();
+            onClicked: _kompas.initComp();//_kompas.changeTrueMagneticCourse();
         }
     }
     Rectangle
