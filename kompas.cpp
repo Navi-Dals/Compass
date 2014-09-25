@@ -40,9 +40,13 @@ Kompas::Kompas(QWidget *parent) :
     settings = new kompasSettings(parent);
     port = new QSerialPort;
     timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(on()));
 
-    timer->start(100);
+    dial = new DialogComp(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(on()));
+    connect(kompasThread,SIGNAL(started()),this,SLOT(initComp()));
+    connect(this,SIGNAL(compStarted()),dial,SLOT(show()));
+    //connect(kompas->kompasThread,SIGNAL(finished()),kompas,SLOT(off()));
+    timer->start(10);
 }
 
 /*void Kompas::on()
@@ -87,6 +91,10 @@ magnetometer */
 
 void Kompas::on()
 {
+
+
+
+
     QSerialPortInfo *info = new QSerialPortInfo(*port);
     if(!(port->isOpen() && info->portName() == settings->m_name_COM))
     {
@@ -172,6 +180,7 @@ void Kompas::on()
     else
     {
         qDebug()<<"WaitForReadyRead failed";
+        qDebug()<<port->error();
     }
 }
 
@@ -258,51 +267,52 @@ void Kompas::setAngle(double a)
 
 void Kompas::initComp()
 {
-
-    QString data;
-    double progress = 0;
-
+    //DialogComp *dial;
+    //dial = new DialogComp(this);
+    //dial->show();
+    emit compStarted();
     QByteArray dataForWrite,dataRead;
     dataForWrite.insert(0,0x0d);
     dataForWrite.insert(1,0x0a);
     dataForWrite.insert(2,0x7e);
     dataForWrite.insert(3,0x72);
     dataForWrite.insert(4,0x01);
-    dataForWrite.insert(5,0x04);
+    dataForWrite.insert(5,0x01);
     dataForWrite.insert(6,0x09);
+    qDebug()<<dataForWrite;
     if(port->isOpen())
     {
-        timer->stop();
         port->write(dataForWrite,7);
-        //port->waitForBytesWritten(1000);
-        dataForWrite.insert(5,0x01);
-
-        while (m_comp_state)
+        if(!port->waitForBytesWritten(1000))
+        {
+            qDebug()<<"Error while writing data";
+        }
+        while(dial->isVisible())
         {
 
-            port->write(dataForWrite,7);
-
-            if(port->waitForBytesWritten(1000))
+            if(port->isOpen() && port->waitForReadyRead(1000))
             {
 
-                if(port->waitForReadyRead(1000))
+                QString data;
+                QByteArray ByteArray;
+                qint64 byteAvail = port->bytesAvailable();
+                qApp->processEvents();
+                if(byteAvail >=19)
                 {
-                    if(port->bytesAvailable()>=13)
-                        dataRead = port->readAll();
-                    data = data.fromLocal8Bit(dataRead).trimmed();
-
-                    if(dataRead[3] == 'r')
+                    ByteArray = port->readAll();
+                    data = data.fromLocal8Bit(ByteArray).trimmed();
+                    if(ByteArray[3]=='r'&& ByteArray[0]==0x0d && ByteArray[1]==0x0a && ByteArray[2]==0x7e)
                     {
-                        QBitArray bitdata(104),one_byte(8);
-                        for(int i = 0,j; i < 104; ++i)
+                        QBitArray bitdata(152),one_byte(8);
+                        for(int i = 0,j; i < 152; ++i)
                         {
                             j=i/8;
-                            if(j<=13)
-                                bitdata[i] = dataRead[j] & (1 << i%8);
+                            if(j<=19)
+                                bitdata[i] = ByteArray[j] & (1 << i%8);
                             else
                                 break;
                         }
-                        qDebug()<<data;
+                        //qDebug()<<data;
                         /*qDebug()<<"First Start byte:"<<ByteArray[0];
                         for(int i=0,j=7;i<8,j>=0;i++,j--){byte[j]=bitdata[i];} qDebug()<<byte;
                         qDebug()<<"Second Start byte:"<<ByteArray[1];
@@ -323,32 +333,53 @@ void Kompas::initComp()
                         //setAngle(Round(toDec(two_bytes,0)*1.41,1));
                         //m_state=0;
                         //qApp->processEvents();
-                        for(int i=0,j=7;i<7,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<(progress = toDec(one_byte,0));qDebug()<<one_byte;
-                        for(int i=80,j=7;i<88,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<(progress = toDec(one_byte,0));qDebug()<<one_byte;
 
-                        for(int i=8,j=7;i<16,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<(progress = toDec(one_byte,0));qDebug()<<one_byte;
-                        if(one_byte[6])
+                        for(int i=56,j=7;i<64,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<toDecInt(one_byte)<<" "<<one_byte;
+                        dial->setBar(7,toDecInt(one_byte));
+                        for(int i=64,j=7;i<72,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<toDecInt(one_byte)<<" "<<one_byte;
+                        dial->setBar(6,toDecInt(one_byte));
+                        for(int i=72,j=7;i<80,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<toDecInt(one_byte)<<" "<<one_byte;
+                        dial->setBar(5,toDecInt(one_byte));
+                        for(int i=80,j=7;i<88,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<toDecInt(one_byte)<<" "<<one_byte;
+                        dial->setBar(4,toDecInt(one_byte));
+                        for(int i=88,j=7;i<96,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<toDecInt(one_byte)<<" "<<one_byte;
+                        dial->setBar(3,toDecInt(one_byte));
+                        for(int i=96,j=7;i<104,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<toDecInt(one_byte)<<" "<<one_byte;
+                        dial->setBar(2,toDecInt(one_byte));
+                        for(int i=104,j=7;i<112,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<toDecInt(one_byte)<<" "<<one_byte;
+                        dial->setBar(1,toDecInt(one_byte));
+                        for(int i=112,j=7;i<120,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<toDecInt(one_byte)<<" "<<one_byte;
+                        dial->setBar(0,toDecInt(one_byte));
+
+                        //dial->setBar(3,5);
+
+                        //for(int i=80,j=7;i<88,j>=0;i++,j--){one_byte[j]=bitdata[i];} /*qDebug()<<(progress = toDec(one_byte,0));*/qDebug()<<one_byte;
+
+                        //for(int i=0,j=7;i<8,j>=0;i++,j--){one_byte[j]=bitdata[i];} /*qDebug()<<(progress = toDec(one_byte,0));*/qDebug()<<one_byte;
+                        qDebug()<<bitdata;
+//                        if(one_byte[6])
+//                        {
+//                            qDebug()<<"finish";
+//                            break;
+//                        }
+                        dataForWrite.insert(5,0x02);
+                        dataForWrite.insert(6,0x0a);
+                        port->write(dataForWrite,7);
+                        if(!port->waitForBytesWritten(1000))
                         {
-                            qDebug()<<"finish";
-                            break;
+                            qDebug()<<"Error while writing data";
                         }
-                        dataForWrite.insert(5,0xf3);
+                        //m_state=0;
+
                         qApp->processEvents();
                     }
                 }
-
             }
-            else
-            {
-                qDebug()<<"Error while writing data";
-            }
-
         }
     }
-    else if(port->isOpen())
-                port->close();
-    port->close();
-    timer->start(500);
+    //delete dial;
+    for(int i=0;i<8;i++)
+        dial->setBar(i,0);
 }
 
 
@@ -359,7 +390,7 @@ void Kompas::showMenu()
     settings->exec();
     emit menuRequest();
     //kompasThread->start();
-    timer->start(500);
+    timer->start(10);
 }
 //void Kompas::setPotenA()
 //{
@@ -447,6 +478,26 @@ double Kompas::toDec(QBitArray bitdata,int p)
         fractpart+=1/pow(2,j)*bitdata[i];
     return (intpart+QString::number(fractpart).left(5).toDouble())*k;
 
+}
+
+int Kompas::toDecInt(QBitArray bitdata)
+{
+    int res = 0;
+    int k=1,s=0;
+
+    if(bitdata[0] == true)
+    {
+        //bitdata=bitdata - QBitArray(16).setBit(15,true);
+        bitdata=~bitdata;
+        k=-1;
+        s=1;
+    }
+
+    for(int i = 0;i < bitdata.size();i++)
+    {
+        res+=pow(2,i)*bitdata[(bitdata.size()-1)-i];
+    }
+    return (res+s)*k;
 }
 
 void Kompas::setRoll(double st)

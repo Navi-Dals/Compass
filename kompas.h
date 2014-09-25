@@ -15,6 +15,7 @@
 //#include "/mnt/rasp-pi-rootfs/usr/include/linux/i2c-dev.h"
 #include "skldialog.h"
 #include "dempfdialog.h"
+#include "dialogcomp.h"
 
 
 
@@ -129,6 +130,7 @@ signals:
     void afterCommaChanged();
     void infoVisibilityChanged();
     void trueMagneticCourseChanged();
+    void compStarted();
 
 private:
     bool m_comp_state;
@@ -163,8 +165,10 @@ private:
 
 
     double toDec(QBitArray,int);
+    int toDecInt(QBitArray);
 public:
     QTimer *timer;
+    DialogComp *dial;
     QThread *kompasThread;
     kompasSettings *settings;
     QSerialPort *port;
