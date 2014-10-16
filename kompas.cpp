@@ -46,7 +46,7 @@ Kompas::Kompas(QWidget *parent) :
     connect(kompasThread,SIGNAL(started()),this,SLOT(initComp()));
     connect(this,SIGNAL(compStarted()),dial,SLOT(show()));
     //connect(kompas->kompasThread,SIGNAL(finished()),kompas,SLOT(off()));
-    timer->start(10);
+    timer->start(11);
 }
 
 /*void Kompas::on()
@@ -138,12 +138,13 @@ void Kompas::on()
         {
             qint64 byteAvail = port->bytesAvailable();
             qApp->processEvents();
-            if(byteAvail >=23)
+            if(byteAvail >=18)
             {
                 ByteArray = port->readAll();
                 data = data.fromLocal8Bit(ByteArray).trimmed();
                 if(ByteArray[3]=='p')
                 {
+                    qDebug()<<"huy pizda";
                     QBitArray bitdata(144),two_bytes(16);
                     for(int i = 0,j; i < 144; ++i)
                     {
@@ -169,7 +170,7 @@ void Kompas::on()
                     setPitch(Round(toDec(two_bytes,1)*1.41,1));
                     for(int i=72,j=15;i<88&&j>=0;i++,j--){two_bytes[j]=bitdata[i];} //Azimuth
                     //qDebug()<<"Dec form: "<<toDec(two_bytes);
-                    //qDebug()<<"DATA " << bitdata;
+                    qDebug()<<"DATA " << bitdata;
                     setAngle(Round(toDec(two_bytes,0)*1.41,1));
                     m_state=0;
                     qApp->processEvents();
@@ -216,7 +217,7 @@ Kompas::~Kompas()
 
 void Kompas::setAngle(double a)
 {
-
+    qDebug()<<a;
     if(!m_tmCourse)
         a=m_skl+a+m_coef_A;
     if(a<0)
@@ -257,6 +258,7 @@ void Kompas::setAngle(double a)
     {
          m_con1++;
     }
+    qDebug()<<" angle:"<<m_angle;
     m_lastAngle1=m_fractPart;
     m_fractPart=m_fractPart+100*m_con1;
     m_fractPart=m_fractPart-(m_fractPart-m_last2)/(m_dempf*2);

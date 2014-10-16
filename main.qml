@@ -16,7 +16,7 @@ Rectangle {
              Image {
                  id: background
                  anchors.fill: parent
-                 source: "content/steel.jpg"
+                 source: "content/wood.jpg"
                  fillMode: Image.PreserveAspectCrop
              }
          }
@@ -362,7 +362,7 @@ Rectangle {
     Rectangle
     {
         id: menuButton
-        x: 34
+        x: 1777
         y:179
         width: 135
         height: 37
@@ -509,8 +509,8 @@ Rectangle {
     Rectangle
     {
         id: tmcButton
-        x: 657
-        y: 365
+        x: 1777
+        y: 360
         width: 135
         height: 44
         visible: true
@@ -519,7 +519,7 @@ Rectangle {
         Text {
             id: tmcText
             anchors.centerIn: parent
-            text: _kompas.trueMagneticCourse === false ? "Tru Course":"Magnetic Course"
+            text: _kompas.trueMagneticCourse === false ? "Истинный курс":"Магнитный курс"
             font.pixelSize: 15
             color: "#FFFFFF"
         }
@@ -574,7 +574,7 @@ Rectangle {
             onEntered: tmcEnterAnim.start()
             onExited: tmcExitAnim.start()
             //При нажатии вызвать функцию
-            onClicked: _kompas.initComp();//_kompas.changeTrueMagneticCourse();
+            onClicked: _kompas.changeTrueMagneticCourse();
         }
     }
     Rectangle
@@ -758,8 +758,8 @@ Rectangle {
     Rectangle
     {
         id: aButton
-        x: 1137
-        y: 241
+        x: 1777
+        y: 236
         width: 135
         height: 43
         visible: true
@@ -833,8 +833,8 @@ Rectangle {
        Rectangle
        {
            id: demButton
-           x: 1137
-           y: 305
+           x: 1777
+           y: 300
            width: 135
            height: 43
            visible: true
@@ -908,7 +908,7 @@ Rectangle {
     Rectangle
     {
         id: sklButton
-        x: 657
+        x: 1777
         y: 47
         width: 135
         height: 43
@@ -982,7 +982,7 @@ Rectangle {
     Rectangle
     {
         id: infoButton
-        x: 657
+        x: 1777
         y: 113
         width: 135
         height: 43
@@ -1054,4 +1054,78 @@ Rectangle {
             onClicked: _kompas.changeInfoScreenVisibility()
         }
     }
+
+    Rectangle
+    {
+        id: compButton
+        x: 1777
+        y: 421
+        width: 135
+        height: 44
+        visible: true
+        anchors.right: parent.right
+        anchors.rightMargin: 8
+        Text {
+            id: compText
+            anchors.centerIn: parent
+            text: "Kомпенсация"
+            font.pixelSize: 15
+            color: "#FFFFFF"
+        }
+        gradient: Gradient { // добавление градиента
+            GradientStop {
+                id: compgradient0
+                position: 0
+                color: rectangle1.gradientcolor0
+            }
+            GradientStop {
+                id: compgradient1
+                position: 1
+                color: rectangle1.gradientcolor1
+            }
+        }
+        ParallelAnimation {
+            id: compEnterAnim
+            PropertyAnimation {
+                target: compgradient0
+                properties: "color"
+                to: rectangle1.gradientcolor1
+                duration: 300
+            }
+            PropertyAnimation {
+                target: compgradient1
+                properties: "color"
+                to: rectangle1.gradientcolor0
+                duration: 300
+            }
+        }
+        ParallelAnimation {
+            id: compExitAnim
+            PropertyAnimation {
+                target: compgradient0
+                properties: "color"
+                to: rectangle1.gradientcolor0
+                duration: 300
+            }
+            PropertyAnimation {
+                target: compgradient1
+                properties: "color"
+                to: rectangle1.gradientcolor1
+                duration: 300
+            }
+        }
+        MouseArea
+        {
+            anchors.fill: parent
+            id: compMouseArea
+            visible: true
+            hoverEnabled: true
+            onEntered: compEnterAnim.start()
+            onExited: compExitAnim.start()
+            //При нажатии вызвать функцию
+            onClicked: _kompas.initComp();
+        }
+    }
 }
+
+
