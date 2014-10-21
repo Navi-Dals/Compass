@@ -28,6 +28,7 @@ MainWindow::~MainWindow()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     //kompas->kompasThread->quit();
+    kompas->off();
     event->accept();
     QMainWindow::closeEvent(event);
 }

@@ -48,7 +48,7 @@ Kompas::Kompas(QWidget *parent) :
 
     connect(settings,SIGNAL(revertRequest()),this,SLOT(revert()));
     //connect(kompas->kompasThread,SIGNAL(finished()),kompas,SLOT(off()));
-    timer->start(11);
+    timer->start(10);
 }
 
 /*void Kompas::on()
@@ -93,10 +93,7 @@ magnetometer */
 
 void Kompas::on()
 {
-
-
-
-
+    qDebug()<<"here";
     QSerialPortInfo *info = new QSerialPortInfo(*port);
     if(!(port->isOpen() && info->portName() == settings->m_name_COM))
     {
@@ -155,23 +152,13 @@ void Kompas::on()
                         else
                             break;
                     }
-                    /*qDebug()<<"First Start byte:"<<ByteArray[0];
-                    for(int i=0,j=7;i<8,j>=0;i++,j--){byte[j]=bitdata[i];} qDebug()<<byte;
-                    qDebug()<<"Second Start byte:"<<ByteArray[1];
-                    for(int i=8,j=7;i<16,j>=0;i++,j--){byte[j]=bitdata[i];} qDebug()<<byte;
-                    qDebug()<<"Third Start byte:"<<ByteArray[2];
-                    for(int i=16,j=7;i<24,j>=0;i++,j--){byte[j]=bitdata[i];} qDebug()<<byte;
-                    qDebug()<<"Message ID:"<<ByteArray[3];
-                    for(int i=24,j=7;i<32,j>=0;i++,j--){byte[j]=bitdata[i];} qDebug()<<byte;
-                    qDebug()<<"Count of bytes:"<<ByteArray[4];
-                    for(int i=32,j=7;i<40,j>=0;i++,j--){byte[j]=bitdata[i];} qDebug()<<byte;*/
+
                     for(int i=40,j=15;i<56&&j>=0;i++,j--){two_bytes[j]=bitdata[i];} //Roll
                     setRoll(Round(toDec(two_bytes,1)*1.41,1));
                     for(int i=56,j=15;i<72&&j>=0;i++,j--){two_bytes[j]=bitdata[i];} //Pitch
                     setPitch(Round(toDec(two_bytes,1)*1.41,1));
                     for(int i=72,j=15;i<88&&j>=0;i++,j--){two_bytes[j]=bitdata[i];} //Azimuth
-                    //qDebug()<<"Dec form: "<<toDec(two_bytes);
-                    //qDebug()<<"DATA " << bitdata;
+
                     setAngle(Round(toDec(two_bytes,0)*1.41,1));
                     m_state=0;
                     qApp->processEvents();
@@ -218,7 +205,6 @@ Kompas::~Kompas()
 
 void Kompas::setAngle(double a)
 {
-    qDebug()<<a;
     if(!m_tmCourse)
         a=m_skl+a+m_coef_A;
     if(a<0)
@@ -259,7 +245,6 @@ void Kompas::setAngle(double a)
     {
          m_con1++;
     }
-    qDebug()<<" angle:"<<m_angle;
     m_lastAngle1=m_fractPart;
     m_fractPart=m_fractPart+100*m_con1;
     m_fractPart=m_fractPart-(m_fractPart-m_last2)/(m_dempf*2);
@@ -270,9 +255,6 @@ void Kompas::setAngle(double a)
 
 void Kompas::initComp()
 {
-    //DialogComp *dial;
-    //dial = new DialogComp(this);
-    //dial->show();
     timer->stop();
     emit compStarted();
     QByteArray dataForWrite;
@@ -305,7 +287,7 @@ void Kompas::initComp()
                 {
                     ByteArray = port->readAll();
                     data = data.fromLocal8Bit(ByteArray).trimmed();
-                    if(ByteArray[3]=='r'&& ByteArray[0]==0x0d && ByteArray[1]==0x0a && ByteArray[2]==0x7e)
+                    if(ByteArray[3]=='r'&& ByteArray[0]=='\r' && ByteArray[1]=='\n' && ByteArray[2]=='~')
                     {
                         QBitArray bitdata(152),one_byte(8);
                         for(int i = 0,j; i < 152; ++i)
@@ -398,6 +380,7 @@ void Kompas::initComp()
 
 void Kompas::revert()
 {
+    timer->stop();
     QByteArray dataForWrite;
     dataForWrite.insert(0,0x0d);
     dataForWrite.insert(1,0x0a);
@@ -430,7 +413,7 @@ void Kompas::revert()
                 {
                     ByteArray = port->readAll();
                     data = data.fromLocal8Bit(ByteArray).trimmed();
-                    if(ByteArray[3]=='r'&& ByteArray[0]==0x0d && ByteArray[1]==0x0a && ByteArray[2]==0x7e)
+                    if(ByteArray[3]=='r'&& ByteArray[0]=='\r' && ByteArray[1]=='\n' && ByteArray[2]=='~')
                     {
                         QBitArray bitdata(152),one_byte(8);
                         for(int i = 0,j; i < 152; ++i)
@@ -441,58 +424,56 @@ void Kompas::revert()
                             else
                                 break;
                         }
-
-//                        for(int i=56,j=7;i<64,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<toDecInt(one_byte)<<" "<<one_byte;
-//                        dial->setBar(7,toDecInt(one_byte));
-//                        for(int i=64,j=7;i<72,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<toDecInt(one_byte)<<" "<<one_byte;
-//                        dial->setBar(6,toDecInt(one_byte));
-//                        for(int i=72,j=7;i<80,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<toDecInt(one_byte)<<" "<<one_byte;
-//                        dial->setBar(5,toDecInt(one_byte));
-//                        for(int i=80,j=7;i<88,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<toDecInt(one_byte)<<" "<<one_byte;
-//                        dial->setBar(4,toDecInt(one_byte));
-//                        for(int i=88,j=7;i<96,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<toDecInt(one_byte)<<" "<<one_byte;
-//                        dial->setBar(3,toDecInt(one_byte));
-//                        for(int i=96,j=7;i<104,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<toDecInt(one_byte)<<" "<<one_byte;
-//                        dial->setBar(2,toDecInt(one_byte));
-//                        for(int i=104,j=7;i<112,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<toDecInt(one_byte)<<" "<<one_byte;
-//                        dial->setBar(1,toDecInt(one_byte));
-//                        for(int i=112,j=7;i<120,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<toDecInt(one_byte)<<" "<<one_byte;
-//                        dial->setBar(0,toDecInt(one_byte));
-
-                        qDebug()<<bitdata;
-                        for(int i=48,j=7;i<56,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<"Status"<<toDecInt(one_byte)<<" "<<one_byte;
-                        if(toDecInt(one_byte)==1)
+                        for(int i=40,j=7;i<48,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<"Status"<<toDecInt(one_byte)<<" "<<one_byte;
+                        if(toDecInt(one_byte)==0)
                         {
-                            settings->setLabel("Success");
+                            settings->setLabel("Compass Compensation Off");
                         }
-                        else if(toDecInt(one_byte)==0)
+                        else if(toDecInt(one_byte)==1)
                         {
-                            settings->setLabel("No error");
+                            settings->setLabel("Compass Compensation Data Collection");
                         }
                         else if(toDecInt(one_byte)==2)
                         {
-                            settings->setLabel("Compensation Already Started");
+                            settings->setLabel("Compass Compensation Computation in Progress");
                         }
                         else if(toDecInt(one_byte)==3)
                         {
-                            settings->setLabel("Compensation Not Started");
+                            settings->setLabel("Compass Compensation Procedure Abort");
                         }
-                        else if(toDecInt(one_byte)==4)
-                        {
-                            settings->setLabel("Compensation Timeout");
-                        }
-                        else if(toDecInt(one_byte)==5)
-                        {
-                            settings->setLabel("Compensation Computation Failure");
-                        }
-                        else if(toDecInt(one_byte)==6)
-                        {
-                            settings->setLabel("New Computed Parameters No Better");
-                        }
-                        else if(toDecInt(one_byte)==7)
-                        {
-                            settings->setLabel("Flash Write Fail");
-                        }
+                        for(int i=48,j=7;i<56,j>=0;i++,j--){one_byte[j]=bitdata[i];} qDebug()<<"Status"<<toDecInt(one_byte)<<" "<<one_byte;
+//                        if(toDecInt(one_byte)==1)
+//                        {
+//                            settings->setLabel("Success");
+//                        }
+//                        else if(toDecInt(one_byte)==0)
+//                        {
+//                            settings->setLabel("No error");
+//                        }
+//                        else if(toDecInt(one_byte)==2)
+//                        {
+//                            settings->setLabel("Compensation Already Started");
+//                        }
+//                        else if(toDecInt(one_byte)==3)
+//                        {
+//                            settings->setLabel("Compensation Not Started");
+//                        }
+//                        else if(toDecInt(one_byte)==4)
+//                        {
+//                            settings->setLabel("Compensation Timeout");
+//                        }
+//                        else if(toDecInt(one_byte)==5)
+//                        {
+//                            settings->setLabel("Compensation Computation Failure");
+//                        }
+//                        else if(toDecInt(one_byte)==6)
+//                        {
+//                            settings->setLabel("New Computed Parameters No Better");
+//                        }
+//                        else if(toDecInt(one_byte)==7)
+//                        {
+//                            settings->setLabel("Flash Write Fail");
+//                        }
                         //m_state=0;
 
                         qApp->processEvents();
@@ -509,6 +490,7 @@ void Kompas::revert()
             }
         }
     }
+    timer->start(10);
 }
 
 void Kompas::showMenu()

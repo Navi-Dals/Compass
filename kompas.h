@@ -60,6 +60,8 @@ public slots:
     Q_INVOKABLE void changeInfoScreenVisibility();
     Q_INVOKABLE void changeTrueMagneticCourse();
 
+    void revert();
+
 
     void setSupply(int st){m_supply=st;}
     int supply(){return m_supply;}
@@ -166,7 +168,7 @@ private:
 
     double toDec(QBitArray,int);
     int toDecInt(QBitArray);
-    void revert();
+
 public:
     QTimer *timer;
     DialogComp *dial;
