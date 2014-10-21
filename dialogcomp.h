@@ -16,6 +16,7 @@ public:
     ~DialogComp();
 
     void setBar(int binNum,int progress);
+    void setLabel(QString msg);
 
 private:
     Ui::DialogComp *ui;

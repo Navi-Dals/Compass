@@ -166,6 +166,7 @@ private:
 
     double toDec(QBitArray,int);
     int toDecInt(QBitArray);
+    void revert();
 public:
     QTimer *timer;
     DialogComp *dial;

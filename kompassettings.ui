@@ -6,30 +6,71 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>280</width>
-    <height>394</height>
+    <width>338</width>
+    <height>387</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Настройки</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="11" column="1">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1">
+    <widget class="QComboBox" name="bit_stop">
+     <item>
+      <property name="text">
+       <string>One Stop</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Two Stop</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>One and Half Stop</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="9" column="1">
+    <widget class="QComboBox" name="parity_c">
+     <item>
+      <property name="text">
+       <string>NoParity</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>EvenParity</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>OddParity</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>SpaceParity</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>MarkParity</string>
+      </property>
+     </item>
+    </widget>
+   </item>
    <item row="8" column="0" colspan="2">
     <widget class="Line" name="line_4">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="0">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>Четность</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="2">
-    <widget class="Line" name="line">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -42,6 +83,27 @@
      </property>
     </widget>
    </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>Стоп бит</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="Line" name="line_3">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Четность</string>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
@@ -49,15 +111,12 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Имя com-порта</string>
+   <item row="2" column="0" colspan="2">
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QComboBox" name="Com_n"/>
    </item>
    <item row="0" column="1">
     <widget class="QComboBox" name="Interface_c">
@@ -78,24 +137,13 @@
      </item>
     </widget>
    </item>
-   <item row="6" column="0" colspan="2">
-    <widget class="Line" name="line_3">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
+   <item row="1" column="1">
+    <widget class="QComboBox" name="Com_n"/>
    </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="label_6">
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Стоп бит</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" colspan="2">
-    <widget class="Line" name="line_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <string>Имя com-порта</string>
      </property>
     </widget>
    </item>
@@ -106,10 +154,10 @@
      </property>
     </widget>
    </item>
-   <item row="10" column="1">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   <item row="4" column="0" colspan="2">
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
@@ -160,54 +208,6 @@
      </item>
     </widget>
    </item>
-   <item row="9" column="1">
-    <widget class="QComboBox" name="parity_c">
-     <item>
-      <property name="text">
-       <string>NoParity</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>EvenParity</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>OddParity</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>SpaceParity</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>MarkParity</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="7" column="1">
-    <widget class="QComboBox" name="bit_stop">
-     <item>
-      <property name="text">
-       <string>One Stop</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Two Stop</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>One and Half Stop</string>
-      </property>
-     </item>
-    </widget>
-   </item>
    <item row="5" column="1">
     <widget class="QComboBox" name="data_bits">
      <item>
@@ -230,6 +230,20 @@
        <string>8</string>
       </property>
      </item>
+    </widget>
+   </item>
+   <item row="10" column="0">
+    <widget class="QLabel" name="label_Revert">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="1">
+    <widget class="QPushButton" name="buttonRevert">
+     <property name="text">
+      <string>Revert</string>
+     </property>
     </widget>
    </item>
   </layout>

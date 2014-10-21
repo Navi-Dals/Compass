@@ -17,6 +17,8 @@ class kompasSettings : public QDialog
 public:
     explicit kompasSettings(QWidget *parent = 0);
     ~kompasSettings();
+
+    void setLabel(QString msg);
     
 private:
     Ui::kompasSettings *ui;
@@ -36,8 +38,12 @@ private slots:
     void on_Interface_c_currentIndexChanged(const QString &arg1);
     void on_buttonBox_clicked(QAbstractButton *button);
 
+    void on_buttonRevert_clicked();
+
 public slots:
     int exec();
+signals:
+    void revertRequest();
 };
 
 #endif // KOMPASSETTINGS_H

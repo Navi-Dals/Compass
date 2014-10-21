@@ -43,3 +43,8 @@ void DialogComp::setBar(int binNum, int progress)
         break;
     }
 }
+
+void DialogComp::setLabel(QString msg)
+{
+    ui->label_9->setText(msg);
+}

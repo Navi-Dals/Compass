@@ -3,10 +3,10 @@ import QtQuick 1.0
 
 Rectangle {
     id: rectangle1
-    //width:  window.dwidth
-    //height: window.dheight
-    width:  1920
-    height: 1080
+    width:  window.dwidth
+    height: window.dheight
+    //width:  1400
+    //height: 900
     //color: "#D3D3D3"
 
     Item {

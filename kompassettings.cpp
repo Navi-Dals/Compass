@@ -2,6 +2,7 @@
 #include "ui_kompassettings.h"
 #include <QCloseEvent>
 #include <QMessageBox>
+#include <QDebug>
 
 
 kompasSettings::kompasSettings(QWidget *parent) :
@@ -126,4 +127,16 @@ void kompasSettings::on_buttonBox_clicked(QAbstractButton *button)
         m_accept = false;
         close();
     }
+}
+
+void kompasSettings::on_buttonRevert_clicked()
+{
+    emit revertRequest();
+    qDebug()<<"Here";
+}
+
+void kompasSettings::setLabel(QString msg)
+{
+    ui->label_Revert->setText(msg);
+
 }
