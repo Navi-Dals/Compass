@@ -90,9 +90,7 @@ Item {
             //clip: true
             //sourceSize.width: 496
             z: -1
-            source: "content/kompas(background).png"
-            sourceSize.width: parent.width
-            sourceSize.height: parent.height
+            source: "content/baggraund.png"
         }
 
         Image {

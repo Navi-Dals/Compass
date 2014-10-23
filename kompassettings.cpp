@@ -58,6 +58,7 @@ void kompasSettings::closeEvent(QCloseEvent *event)
         break;
     }
     event->accept();
+    ui->label_Revert->setText("");
 }
 void kompasSettings::on_Interface_c_currentIndexChanged(const QString &arg1)
 {

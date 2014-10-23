@@ -93,7 +93,6 @@ magnetometer */
 
 void Kompas::on()
 {
-    qDebug()<<"here";
     QSerialPortInfo *info = new QSerialPortInfo(*port);
     if(!(port->isOpen() && info->portName() == settings->m_name_COM))
     {

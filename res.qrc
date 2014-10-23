@@ -32,5 +32,9 @@
         <file>content/kompasD1(720).png</file>
         <file>content/steel1.jpg</file>
         <file>content/wood.jpg</file>
+        <file>content/baggraund.png</file>
+        <file>content/steel2.jpg</file>
+        <file>content/steel3.jpg</file>
+        <file>content/steel4.jpg</file>
     </qresource>
 </RCC>
