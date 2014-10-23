@@ -172,7 +172,7 @@ private:
 public:
     QTimer *timer;
     DialogComp *dial;
-    QThread *kompasThread;
+    QThread *kompasThread,*kompasThread1;
     kompasSettings *settings;
     QSerialPort *port;
 };

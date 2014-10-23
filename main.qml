@@ -207,12 +207,24 @@ Rectangle {
 
     }
 
+    Image
+    {
+        id:ramka
+        anchors.horizontalCenter: kompas.horizontalCenter
+        anchors.verticalCenter: kompas.verticalCenter
+        source:"content/ramka.png"
+        width: 820
+        height: 820
+        anchors.verticalCenterOffset: -10
+        anchors.horizontalCenterOffset: 0
+    }
+
     //компас
     Kompas
     {
         id:kompas
         width: 720
-        height: 708
+        height: 720
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         //x: 7

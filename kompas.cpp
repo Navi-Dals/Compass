@@ -37,12 +37,16 @@ Kompas::Kompas(QWidget *parent) :
     m_infoVisibility=false;
     m_savedCourseVisibility=false;
     kompasThread = new QThread(this);
+    kompasThread1 = new QThread(this);
     settings = new kompasSettings(parent);
     port = new QSerialPort;
     timer = new QTimer(this);
 
     dial = new DialogComp(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(on()));
+    connect(timer, SIGNAL(timeout()),kompasThread1, SLOT(start()));
+
+    connect(kompasThread1,SIGNAL(started()),this,SLOT(on()));
+
     connect(kompasThread,SIGNAL(started()),this,SLOT(initComp()));
     connect(this,SIGNAL(compStarted()),dial,SLOT(show()));
 
@@ -170,6 +174,7 @@ void Kompas::on()
         qDebug()<<"WaitForReadyRead failed";
         qDebug()<<port->error();
     }
+    kompasThread1->quit();
 }
 
 
