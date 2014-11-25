@@ -43,6 +43,7 @@ Kompas::Kompas(QWidget *parent) :
     timer = new QTimer(this);
 
     dial = new DialogComp(this);
+
     connect(timer, SIGNAL(timeout()),kompasThread1, SLOT(start()));
 
     connect(kompasThread1,SIGNAL(started()),this,SLOT(on()));
@@ -53,6 +54,8 @@ Kompas::Kompas(QWidget *parent) :
     connect(settings,SIGNAL(revertRequest()),this,SLOT(revert()));
     //connect(kompas->kompasThread,SIGNAL(finished()),kompas,SLOT(off()));
     timer->start(10);
+
+
 }
 
 /*void Kompas::on()
@@ -97,6 +100,7 @@ magnetometer */
 
 void Kompas::on()
 {
+
     QSerialPortInfo *info = new QSerialPortInfo(*port);
     if(!(port->isOpen() && info->portName() == settings->m_name_COM))
     {
@@ -107,6 +111,15 @@ void Kompas::on()
         port->setPortName(settings->m_name_COM);
         if (port->open(QIODevice::ReadWrite))
         {
+            QFile file("dataRead.dat");
+            if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+            {
+               QTextStream stream(&file);
+               m_skl = stream.readLine().toInt();
+               m_coef_A = stream.readLine().toInt();
+               file.close();
+            }
+
             updateSettings();
             QSerialPortInfo *info = new QSerialPortInfo(*port);
             qDebug() << "Name        : " << info->portName();
@@ -209,8 +222,9 @@ Kompas::~Kompas()
 
 void Kompas::setAngle(double a)
 {
-    if(!m_tmCourse)
-        a=m_skl+a+m_coef_A;
+    a = a + m_coef_A;
+    if(m_tmCourse)
+        a=m_skl+a;
     if(a<0)
        a+=360;
     if(a>360)
@@ -535,20 +549,40 @@ void Kompas::updateSettings()
 void Kompas::changeColor()
 {
     m_color++;
-    if(m_color == 2)
+    if(m_color == 4)
         m_color=0;
     emit colorChanged();
 }
 void Kompas::changeSkl()
 {
     sklDialog* dlg= new sklDialog(this,m_skl,0);
-    if(dlg->exec()) m_skl=dlg->getSkl();
+    if(dlg->exec())
+    {
+        m_skl=dlg->getSkl();
+        QFile file("dataRead.dat");
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+                return;
+        QTextStream stream(&file);
+        stream << m_skl << "\n";
+        stream << m_coef_A;
+        file.close();
+    }
     delete (dlg);
 }
 void Kompas::changeA()
 {
     sklDialog* dlg= new sklDialog(this,m_coef_A,1);
-    if(dlg->exec()) m_coef_A=dlg->getSkl();
+    if(dlg->exec())
+    {
+        m_coef_A=dlg->getSkl();
+        QFile file("dataRead.dat");
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+                return;
+        QTextStream stream(&file);
+        stream << m_skl << "\n\t";
+        stream << m_coef_A;
+        file.close();
+    }
     delete (dlg);
 }
 

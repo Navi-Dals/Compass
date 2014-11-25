@@ -6,6 +6,8 @@
 #include <QtDeclarative/QDeclarativeView>
 #include <QGraphicsObject>
 #include <QtGui>
+#include <QFile>
+#include <QTextStream>
 #include <QtDeclarative/QDeclarativeContext>
 #include <kompassettings.h>
 #include <QtSerialPort/QSerialPort>

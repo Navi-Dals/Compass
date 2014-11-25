@@ -3,10 +3,10 @@ import QtQuick 1.0
 
 Rectangle {
     id: rectangle1
-    //width:  window.dwidth
-    //height: window.dheight
-    width:  1920
-    height: 1080
+    width:  window.dwidth
+    height: window.dheight
+    //width:  1920
+    //height: 1080
     //color: "#D3D3D3"
 
     Item {
@@ -16,7 +16,7 @@ Rectangle {
              Image {
                  id: background
                  anchors.fill: parent
-                 source: "content/steel4.jpg"
+                 source:(_kompas.color === 0 ? "content/steel4.jpg" :( _kompas.color === 1 ? "content/steel3.jpg":(_kompas.color === 2 ? "content/steel2.jpg":(_kompas.color=== 3 ? "content/wood.jpg":"content/steel4.jpg"))))
                  fillMode: Image.PreserveAspectCrop
              }
          }
@@ -258,7 +258,7 @@ Rectangle {
                 font.family: a_LCDNovaObl.name
                 style: Text.Outline
                 styleColor: "blue"
-                color: (_kompas.color === 0 ? "white" :( _kompas.color === 1 ? "blue":(_kompas.color === 2 ? "red":(_kompas.color=== 3 ? "green":"green"))))
+                color: "white"
             }
         }
 
@@ -451,17 +451,17 @@ Rectangle {
     Rectangle
     {
         id: colorButton
-        x: 657
-        y: 46
+        x: 1257
+        y: 488
         width: 135
         height: 44
-        visible: false
+        visible: true
         anchors.right: parent.right
         anchors.rightMargin: 8
         Text {
             id: colotText
             anchors.centerIn: parent;
-            text: "Изменить цвет"
+            text: "Изменить fon"
             font.pixelSize: 15
             color: "#FFFFFF"
         }
@@ -531,7 +531,7 @@ Rectangle {
         Text {
             id: tmcText
             anchors.centerIn: parent
-            text: _kompas.trueMagneticCourse === false ? "Истинный курс":"Магнитный курс"
+            text: _kompas.trueMagneticCourse === true ? "Истинный курс":"Магнитный курс"
             font.pixelSize: 15
             color: "#FFFFFF"
         }
@@ -630,7 +630,7 @@ Rectangle {
         id: potenA
         y: 343
         width: 114
-        //visible: _kompas.infoVisibility
+        visible: _kompas.infoVisibility
         height: 44
         border.width: 2
         border.color: "#0500ff"
@@ -665,7 +665,7 @@ Rectangle {
     {
         id: potenB
         y: 426
-        //visible: _kompas.infoVisibility
+        visible: _kompas.infoVisibility
         width: 114
         height: 44
         border.width: 2
@@ -701,7 +701,7 @@ Rectangle {
     {
         id: potenC
         y: 521
-        //visible: _kompas.infoVisibility
+        visible: _kompas.infoVisibility
         width: 114
         height: 44
         border.width: 2
