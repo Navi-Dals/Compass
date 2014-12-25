@@ -16,7 +16,7 @@ Rectangle {
              Image {
                  id: background
                  anchors.fill: parent
-                 source:(_kompas.color === 0 ? "content/steel4.jpg" :( _kompas.color === 1 ? "content/steel3.jpg":(_kompas.color === 2 ? "content/steel2.jpg":(_kompas.color=== 3 ? "content/wood.jpg":"content/steel4.jpg"))))
+                 source:(_kompas.color === 0 ? "content/steel4.png" :( _kompas.color === 1 ? "content/steel3.png":(_kompas.color === 2 ? "content/steel2.png":(_kompas.color=== 3 ? "content/wood.png":"content/steel4.png"))))
                  fillMode: Image.PreserveAspectCrop
              }
          }
@@ -461,7 +461,7 @@ Rectangle {
         Text {
             id: colotText
             anchors.centerIn: parent;
-            text: "Изменить fon"
+            text: "Изменить фон"
             font.pixelSize: 15
             color: "#FFFFFF"
         }

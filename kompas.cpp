@@ -101,6 +101,7 @@ magnetometer */
 void Kompas::on()
 {
 
+    timer->stop();
     QSerialPortInfo *info = new QSerialPortInfo(*port);
     if(!(port->isOpen() && info->portName() == settings->m_name_COM))
     {
@@ -153,17 +154,17 @@ void Kompas::on()
         {
             qint64 byteAvail = port->bytesAvailable();
             qApp->processEvents();
-            if(byteAvail >=18)
+            if(byteAvail >=13)
             {
                 ByteArray = port->readAll();
                 data = data.fromLocal8Bit(ByteArray).trimmed();
                 if(ByteArray[3]=='p')
                 {
-                    QBitArray bitdata(144),two_bytes(16);
-                    for(int i = 0,j; i < 144; ++i)
+                    QBitArray bitdata(104),two_bytes(16);
+                    for(int i = 0,j; i < 104; ++i)
                     {
                         j=i/8;
-                        if(j<=18)
+                        if(j<=13)
                             bitdata[i] = ByteArray[j] & (1 << i%8);
                         else
                             break;
@@ -188,6 +189,7 @@ void Kompas::on()
         qDebug()<<port->error();
     }
     kompasThread1->quit();
+    timer->start(10);
 }
 
 
